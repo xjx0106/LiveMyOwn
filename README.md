@@ -9,6 +9,10 @@ npm install
 ```
 npm run serve
 ```
+or
+```
+npm start
+```
 
 ### Compiles and minifies for production
 ```
