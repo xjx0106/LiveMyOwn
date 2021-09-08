@@ -1,0 +1,69 @@
+<template>
+  <div class="loading-modal">
+    <div class="loading">
+      <div class="logo">
+        <img src="../assets/image/loading.gif" />
+      </div>
+      <div class="text">L o a d i n g {{ dots }}</div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Loading",
+  data() {
+    return {
+      dots: "",
+    };
+  },
+  created() {
+    setInterval(() => {
+      this.setDot();
+    }, 1000);
+  },
+  mounted() {},
+  methods: {
+    setDot() {
+      let d = new Date();
+      let second = d.getSeconds();
+      switch (second % 3) {
+        case 0:
+          this.dots = ".";
+          break;
+        case 1:
+          this.dots = ". .";
+          break;
+        case 2:
+          this.dots = ". . .";
+          break;
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.loading-modal {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: #ffefc3;
+  .loading {
+    margin: 0px auto;
+    margin-top: 45vh;
+    .logo {
+      > img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .text {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+  }
+}
+</style>
