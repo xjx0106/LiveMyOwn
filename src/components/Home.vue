@@ -9,7 +9,7 @@
         @canplay="videoLoaded"
         ref="video"
       >
-        <source src="@/assets/video/neon-bg.mp4" id="v1" />
+        <source src="@/assets/video/neon-bg2.mp4" id="v1" />
       </video>
     </div>
     <div class="mian-area">
@@ -35,12 +35,10 @@ export default {
   methods: {
     async videoLoaded() {
       console.log("videoLoaded, emit home-loaded");
-      setTimeout(() => {
-        ee.emit("home-loaded");
-        this.$nextTick(() => {
-          this.$refs.video.play();
-        });
-      }, 3000);
+      ee.emit("home-loaded");
+      this.$nextTick(() => {
+        this.$refs.video.play();
+      });
     },
   },
 };
@@ -73,8 +71,8 @@ export default {
     justify-content: space-around;
     align-items: center;
     .mian-left {
-      height: 90%;
-      width: 45%; 
+      height: 93%;
+      width: 47%;
       background-color: #00000000;
       display: flex;
       align-items: center;
@@ -88,8 +86,8 @@ export default {
       }
     }
     .mian-right {
-      height: 90%;
-      width: 45%;
+      height: 93%;
+      width: 47%;
       background-color: #00000099;
     }
     > div {
