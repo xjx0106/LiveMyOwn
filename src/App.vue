@@ -6,8 +6,9 @@
 </template>
 
 <script>
-import Loading from "./components/Loading.vue";
-import Home from "./components/Home.vue";
+import Loading from "@/components/Loading.vue";
+import Home from "@/components/Home.vue";
+import ee from "@/components/eventEmitter.js";
 
 export default {
   name: "App",
@@ -22,12 +23,19 @@ export default {
     }
   },
   created() {
-    setTimeout(() => {
+    ee.on("home-loaded", this.loadingDisappear);
+  },
+  beforeDestroy() {
+    ee.off("home-loaded", this.loadingDisappear);
+  },
+  methods: {
+    loadingDisappear() {
+      console.log("loadingDisappear");
       this.loadingStyle = "opacity: 0";
-    }, 3000);
-    setTimeout(() => {
-      this.loadingShow = false;
-    }, 3100);
+      setTimeout(() => {
+        this.loadingShow = false;
+      }, 1100);
+    }
   }
 };
 </script>

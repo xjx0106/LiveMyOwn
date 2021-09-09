@@ -2,7 +2,7 @@
   <div class="loading-modal">
     <div class="loading">
       <div class="logo">
-        <img src="../assets/image/loading.gif" />
+        <img src="@/assets/image/loading.gif" />
       </div>
       <div class="text">L o a d i n g {{ dots }}</div>
     </div>
@@ -18,23 +18,30 @@ export default {
     };
   },
   created() {
+    let dotCount = 0;
     setInterval(() => {
-      this.setDot();
+      this.setDot(dotCount);
+      if(dotCount === 3) {
+        dotCount = 0;
+      } else {
+        dotCount++;
+      }
     }, 1000);
   },
   mounted() {},
   methods: {
-    setDot() {
-      let d = new Date();
-      let second = d.getSeconds();
-      switch (second % 3) {
+    setDot(dotCount) {
+      switch (dotCount) {
         case 0:
-          this.dots = ".";
+          this.dots = "";
           break;
         case 1:
-          this.dots = ". .";
+          this.dots = ".";
           break;
         case 2:
+          this.dots = ". .";
+          break;
+        case 3:
           this.dots = ". . .";
           break;
       }
