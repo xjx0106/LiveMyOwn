@@ -1,9 +1,8 @@
 <template>
   <div class="home">
-    <div
-      class="background"
-      :style="{ backgroundImage: 'url(' + backgroundImageUrl + ')' }"
-    ></div>
+    <div class="background">
+      <video src="@/assets/video/neon-bg.mp4" type="video/mp4" autoplay loop class="video" muted @canplay="videoLoaded" ref="video"/>
+    </div>
     <div class="text">home page</div>
   </div>
 </template>
@@ -13,36 +12,18 @@ export default {
   name: "Home",
   data() {
     return {
-      backgroundImageUrl: require("../assets/image/bg4.jpg"),
+
     };
   },
   created() {
-    let bgCount = 1;
-    setInterval(() => {
-      this.setBackground(bgCount);
-      if (bgCount === 4) {
-        bgCount = 1;
-      } else {
-        bgCount++;
-      }
-    }, 15000);
+
   },
   computed: {},
   methods: {
-    setBackground(bgCount) {
-      if(bgCount === 1) {
-        this.backgroundImageUrl = require("../assets/image/bg1.jpg");
-      }
-      if(bgCount === 2) {
-        this.backgroundImageUrl = require("../assets/image/bg2.jpg");
-      }
-      if(bgCount === 3) {
-        this.backgroundImageUrl = require("../assets/image/bg3.jpg");
-      }
-      if(bgCount === 4) {
-        this.backgroundImageUrl = require("../assets/image/bg4.jpg");
-      }
-    },
+    videoLoaded() {
+      console.log("videoLoaded");
+      // this.$refs.video.play();
+    }
   },
 };
 </script>
@@ -58,10 +39,15 @@ export default {
     left: 0px;
     height: 100%;
     width: 100%;
-    z-index: 1;
-    background-size: cover;
-    transition: background-image 6s;
-    filter: blur(4px);
+    // z-index: 1;
+    // background-size: cover;
+    // transition: background-image 6s;
+    // filter: blur(4px);
+    .video {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
   }
   .text {
     color: white;

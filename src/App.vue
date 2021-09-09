@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Loading v-if="loadingShow" class="loading" :style="loadingStyle"></Loading>
     <Home></Home>
+    <Loading v-if="loadingShow" class="loading" :style="loadingStyle"></Loading>
   </div>
 </template>
 
