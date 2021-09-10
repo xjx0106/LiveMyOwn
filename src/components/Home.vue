@@ -27,19 +27,38 @@
           標題標題標題
         </div>
       </div>
-      <div class="mian-right"></div>
+      <div class="mian-right">
+        <div class="header">
+          <div v-for="(item, index) in data.header" :key="index" class="items">
+            <div class="title">
+              {{item.title}}
+            </div>
+            <div class="item-img">
+              <img src="@/assets/image/bg1.jpg" alt="" >
+            </div>
+            <div class="introduce">
+              {{item.introduce}}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import ee from "@/components/eventEmitter.js";
+import dataEnglish from "@/assets/file/data.js"
 export default {
   name: "Home",
   data() {
-    return {};
+    return {
+      data: null
+    };
   },
-  created() {},
+  created() {
+    this.data = dataEnglish;
+  },
   computed: {},
   methods: {
     async backgroundLoaded() {
@@ -82,9 +101,9 @@ export default {
     align-items: center;
     .mian-left {
       // border: 1px solid red;
-      height: 93%;
-      width: 47%;
-      background-color: #00000000;
+      height: 95%;
+      width: 47.5%;
+      // background-color: red;
       display: flex;
       align-items: center;
       .mian-title {
@@ -97,13 +116,71 @@ export default {
       }
     }
     .mian-right {
-      height: 93%;
-      width: 47%;
+      height: 95%;
+      width: 47.5%;
       background-color: #00000066;
-    }
-    > div {
-      width: 50px;
-      height: 50px;
+      .header {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        cursor: pointer;
+        .items {
+          border: 1px solid #ffffff00;
+          transition: all 0.3s;
+          display: flex;
+          flex-direction: row;
+          height: 100%;
+          position: relative;
+          
+          .title{ 
+            width: 30%;
+            font-size: 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .introduce {
+            width: 70%;
+            font-size: 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .item-img {
+            transition: opacity 0.6s;
+            opacity: 0;
+            height: 100%;
+            width: 70%;
+            position: absolute;
+            right: 0px;
+            overflow: hidden;
+            > img {
+              transition: transform 0.6s;
+              transform: scale(1);
+              height: 100%;
+              width: 100%;
+            }
+          }
+        }
+        .items:hover {
+          border: 1px solid #ffffff88;
+          background-color: black;
+        }
+        .items:hover .item-img {
+          overflow: hidden;
+          opacity: 1;
+        }
+        .items:hover .item-img >img {
+          transform: scale(1.2);
+        }
+        .items:hover .introduce {
+          z-index: 9999;
+          color: white;
+        }
+      }
     }
   }
 }
