@@ -31,13 +31,13 @@
         <div class="header">
           <div v-for="(item, index) in data.header" :key="index" class="items">
             <div class="title">
-              {{item.title}}
+              {{ item.title }}
             </div>
             <div class="item-img">
-              <img :src="item.poster" alt="" >
+              <img :src="item.poster" alt="" @load="imageLoad(item.title)" />
             </div>
             <div class="introduce">
-              {{item.introduce}}
+              {{ item.introduce }}
             </div>
           </div>
         </div>
@@ -47,27 +47,68 @@
 </template>
 
 <script>
-import ee from "@/components/eventEmitter.js";
-import dataEnglish from "@/assets/file/data.js"
+// import ee from "@/components/eventEmitter.js";
+import dataConfig from "@/assets/file/data.js";
+
 export default {
   name: "Home",
   data() {
     return {
-      data: null
+      data: null,
+      imageCompleteWatcher: {},
     };
   },
   created() {
-    this.data = dataEnglish;
+    this.data = dataConfig;
+    this.initImageCompleteWatcher();
+  },
+  watch: {
+    imageCompleteWatcher: {
+      handler: function(val) {
+        console.log("【watch】", val);
+        // this.$nextTick(() => {
+        //   let allowHideLoading = true;
+        //   Object.values(val).forEach((isThisPicLoaded) => {
+        //     if (isThisPicLoaded === false) {
+        //       allowHideLoading = false;
+        //     }
+        //   });
+
+        //   if (!allowHideLoading) {
+        //     console.log("存在未加載完成的圖片");
+        //   } else {
+        //     console.log("全部圖片已經加載");
+            // ee.emit("home-loaded");
+        //     console.log("全部圖片已經加載，請求關閉loading頁面");
+        //     this.$nextTick(() => {
+        //       this.$refs.video.play();
+        //     });
+        //   }
+        // });
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   computed: {},
   methods: {
-    async backgroundLoaded() {
-      // alert("ready to emit")
-      console.log("backgroundLoaded, emit home-loaded");
-      ee.emit("home-loaded");
-      this.$nextTick(() => {
-        this.$refs.video.play();
+    initImageCompleteWatcher() {
+      dataConfig.header.forEach((itme) => {
+        this.imageCompleteWatcher[itme.title] = false;
       });
+      this.imageCompleteWatcher.bg = false;
+      console.log(this.imageCompleteWatcher);
+    },
+    backgroundLoaded() {
+      console.log("img", "bg");
+      // alert("ready to emit")
+      this.imageCompleteWatcher.bg = true;
+      console.log(this.imageCompleteWatcher);
+    },
+    imageLoad(p) {
+      console.log("img", p);
+      this.imageCompleteWatcher[p] = true;
+      console.log(this.imageCompleteWatcher);
     },
   },
 };
@@ -132,8 +173,8 @@ export default {
           flex-direction: row;
           height: 100%;
           position: relative;
-          
-          .title{ 
+
+          .title {
             width: 30%;
             font-size: 20px;
             height: 100%;
@@ -174,7 +215,7 @@ export default {
           overflow: hidden;
           opacity: 1;
         }
-        .items:hover .item-img >img {
+        .items:hover .item-img > img {
           transform: scale(1.2);
         }
         .items:hover .introduce {
