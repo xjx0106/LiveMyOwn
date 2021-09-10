@@ -26,7 +26,7 @@ export default {
       } else {
         dotCount++;
       }
-    }, 1000);
+    }, 400);
   },
   mounted() {},
   methods: {

@@ -47,7 +47,7 @@
 </template>
 
 <script>
-// import ee from "@/components/eventEmitter.js";
+import ee from "@/components/eventEmitter.js";
 import dataConfig from "@/assets/file/data.js";
 
 export default {
@@ -55,60 +55,82 @@ export default {
   data() {
     return {
       data: null,
-      imageCompleteWatcher: {},
+      imageCompleteWatcher: {
+        // 九龍城寨: false,
+        // 霓虹消逝: false,
+        // 網路潔癖: false,
+        // bg: false
+      },
     };
   },
   created() {
+    console.log("created");
     this.data = dataConfig;
     this.initImageCompleteWatcher();
   },
+  mounted() {
+    console.log("mounted");
+  },
   watch: {
     imageCompleteWatcher: {
-      handler: function(val) {
-        console.log("【watch】", val);
-        // this.$nextTick(() => {
-        //   let allowHideLoading = true;
-        //   Object.values(val).forEach((isThisPicLoaded) => {
-        //     if (isThisPicLoaded === false) {
-        //       allowHideLoading = false;
-        //     }
-        //   });
+      handler(val) {
+        console.log("【watch】imageCompleteWatcher", JSON.stringify(val));
+        let value = JSON.parse(JSON.stringify(val));
 
-        //   if (!allowHideLoading) {
-        //     console.log("存在未加載完成的圖片");
-        //   } else {
-        //     console.log("全部圖片已經加載");
-            // ee.emit("home-loaded");
-        //     console.log("全部圖片已經加載，請求關閉loading頁面");
-        //     this.$nextTick(() => {
-        //       this.$refs.video.play();
-        //     });
-        //   }
-        // });
+        this.$nextTick(() => {
+          let allowHideLoading = true;
+          Object.values(value).forEach((isThisPicLoaded) => {
+            if (isThisPicLoaded === false) {
+              allowHideLoading = false;
+            }
+          });
+
+          if (!allowHideLoading) {
+            console.log("存在未加載完成的圖片");
+          } else {
+            console.log("全部圖片已經加載");
+            ee.emit("home-loaded");
+            console.log("全部圖片已經加載，請求關閉loading頁面");
+            // if(this.refs.video) {
+            //   this.$refs.video.play();
+            // }
+          }
+        });
       },
       deep: true,
-      immediate: true,
+      // immediate: true,
     },
   },
   computed: {},
   methods: {
+    /**
+     * 初始化圖片集合
+     * @description 用於通過watch檢測圖片是否已經全部加載完畢
+     */
     initImageCompleteWatcher() {
       dataConfig.header.forEach((itme) => {
         this.imageCompleteWatcher[itme.title] = false;
       });
       this.imageCompleteWatcher.bg = false;
-      console.log(this.imageCompleteWatcher);
+      this.imageCompleteWatcher = JSON.parse(JSON.stringify(this.imageCompleteWatcher));
+      // console.log(this.imageCompleteWatcher);
     },
+    /**
+     * 背景視頻（背景圖片）加載完畢
+     */
     backgroundLoaded() {
-      console.log("img", "bg");
-      // alert("ready to emit")
+      // console.log("img", "bg");
       this.imageCompleteWatcher.bg = true;
-      console.log(this.imageCompleteWatcher);
+      // console.log(this.imageCompleteWatcher);
     },
+    /**
+     * 列表的圖片加載完畢
+     * @param {String} p 圖片的名字
+     */
     imageLoad(p) {
-      console.log("img", p);
+      // console.log("img", p);
       this.imageCompleteWatcher[p] = true;
-      console.log(this.imageCompleteWatcher);
+      // console.log(this.imageCompleteWatcher);
     },
   },
 };
