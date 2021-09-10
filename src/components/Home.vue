@@ -24,7 +24,7 @@
     <div class="mian-area">
       <div class="mian-left">
         <div class="mian-title">
-          標題標題標題
+          這裏有我的故事
         </div>
       </div>
       <div class="mian-right">
@@ -36,7 +36,7 @@
             <div class="item-img">
               <img :src="item.poster" alt="" @load="imageLoad(item.title)" />
             </div>
-            <div class="introduce">
+            <div class="introduce" :style="introduceStyle">
               {{ item.introduce }}
             </div>
           </div>
@@ -61,6 +61,7 @@ export default {
         // 網路潔癖: false,
         // bg: false
       },
+      introduceStyle: "", // 介紹的文字的動態樣式
     };
   },
   created() {
@@ -91,6 +92,9 @@ export default {
             console.log("全部圖片已經加載");
             ee.emit("home-loaded");
             console.log("全部圖片已經加載，請求關閉loading頁面");
+            setTimeout(() => {
+              this.introduceStyle = "z-index: 9999";
+            }, 1000);
             // if(this.refs.video) {
             //   this.$refs.video.play();
             // }
@@ -102,6 +106,9 @@ export default {
     },
   },
   computed: {},
+  beforeDestroy() {
+    this.introduceStyle = "";
+  },
   methods: {
     /**
      * 初始化圖片集合
@@ -112,7 +119,9 @@ export default {
         this.imageCompleteWatcher[itme.title] = false;
       });
       this.imageCompleteWatcher.bg = false;
-      this.imageCompleteWatcher = JSON.parse(JSON.stringify(this.imageCompleteWatcher));
+      this.imageCompleteWatcher = JSON.parse(
+        JSON.stringify(this.imageCompleteWatcher)
+      );
       // console.log(this.imageCompleteWatcher);
     },
     /**
@@ -205,8 +214,11 @@ export default {
             justify-content: center;
           }
           .introduce {
+            transition: opacity 0.6s;
+            margin-left: 20px;
+            margin-right: 20px;
             width: 70%;
-            font-size: 20px;
+            font-size: 16px;
             height: 100%;
             display: flex;
             align-items: center;
@@ -221,7 +233,7 @@ export default {
             right: 0px;
             overflow: hidden;
             > img {
-              filter: blur(2px);
+              // filter: blur(2px);
               transition: transform 0.6s;
               transform: scale(1);
               height: 100%;
@@ -241,8 +253,8 @@ export default {
           transform: scale(1.2);
         }
         .items:hover .introduce {
-          z-index: 9999;
           color: white;
+          opacity: 0.6;
         }
       }
     }
