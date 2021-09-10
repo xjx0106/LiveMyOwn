@@ -30,10 +30,11 @@ export default {
   },
   methods: {
     loadingDisappear() {
-      console.log("loadingDisappear");
+      console.log("收到loading消失的請求");
       this.loadingStyle = "opacity: 0";
       setTimeout(() => {
         this.loadingShow = false;
+        console.log("執行loading消失");
       }, 1100);
     }
   }
@@ -54,8 +55,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 
-  overflow: hidden; // 阻止手机滑动
-  position:fixed; // 阻止手机滑动
+  overflow: hidden; // 阻止手機滑動
+  position:fixed; // 阻止手機滑動
   .loading {
     transition: all 1s;
   }

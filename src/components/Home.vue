@@ -24,20 +24,20 @@
     <div class="mian-area">
       <div class="mian-left">
         <div class="mian-title">
-          標題標題標題
+          這裏有我的故事
         </div>
       </div>
       <div class="mian-right">
         <div class="header">
           <div v-for="(item, index) in data.header" :key="index" class="items">
             <div class="title">
-              {{item.title}}
+              {{ item.title }}
             </div>
             <div class="item-img">
-              <img :src="item.poster" alt="" >
+              <img :src="item.poster" alt="" @load="imageLoad(item.title)" />
             </div>
-            <div class="introduce">
-              {{item.introduce}}
+            <div class="introduce" :style="introduceStyle">
+              {{ item.introduce }}
             </div>
           </div>
         </div>
@@ -48,26 +48,98 @@
 
 <script>
 import ee from "@/components/eventEmitter.js";
-import dataEnglish from "@/assets/file/data.js"
+import dataConfig from "@/assets/file/data.js";
+
 export default {
   name: "Home",
   data() {
     return {
-      data: null
+      data: null,
+      imageCompleteWatcher: {
+        // 九龍城寨: false,
+        // 霓虹消逝: false,
+        // 網路潔癖: false,
+        // bg: false
+      },
+      introduceStyle: "", // 介紹的文字的動態樣式
     };
   },
   created() {
-    this.data = dataEnglish;
+    console.log("created");
+    this.data = dataConfig;
+    this.initImageCompleteWatcher();
+  },
+  mounted() {
+    console.log("mounted");
+  },
+  watch: {
+    imageCompleteWatcher: {
+      handler(val) {
+        console.log("【watch】imageCompleteWatcher", JSON.stringify(val));
+        let value = JSON.parse(JSON.stringify(val));
+
+        this.$nextTick(() => {
+          let allowHideLoading = true;
+          Object.values(value).forEach((isThisPicLoaded) => {
+            if (isThisPicLoaded === false) {
+              allowHideLoading = false;
+            }
+          });
+
+          if (!allowHideLoading) {
+            console.log("存在未加載完成的圖片");
+          } else {
+            console.log("全部圖片已經加載");
+            ee.emit("home-loaded");
+            console.log("全部圖片已經加載，請求關閉loading頁面");
+            setTimeout(() => {
+              this.introduceStyle = "z-index: 9999";
+            }, 1000);
+            // if(this.refs.video) {
+            //   this.$refs.video.play();
+            // }
+          }
+        });
+      },
+      deep: true,
+      // immediate: true,
+    },
   },
   computed: {},
+  beforeDestroy() {
+    this.introduceStyle = "";
+  },
   methods: {
-    async backgroundLoaded() {
-      // alert("ready to emit")
-      console.log("backgroundLoaded, emit home-loaded");
-      ee.emit("home-loaded");
-      this.$nextTick(() => {
-        this.$refs.video.play();
+    /**
+     * 初始化圖片集合
+     * @description 用於通過watch檢測圖片是否已經全部加載完畢
+     */
+    initImageCompleteWatcher() {
+      dataConfig.header.forEach((itme) => {
+        this.imageCompleteWatcher[itme.title] = false;
       });
+      this.imageCompleteWatcher.bg = false;
+      this.imageCompleteWatcher = JSON.parse(
+        JSON.stringify(this.imageCompleteWatcher)
+      );
+      // console.log(this.imageCompleteWatcher);
+    },
+    /**
+     * 背景視頻（背景圖片）加載完畢
+     */
+    backgroundLoaded() {
+      // console.log("img", "bg");
+      this.imageCompleteWatcher.bg = true;
+      // console.log(this.imageCompleteWatcher);
+    },
+    /**
+     * 列表的圖片加載完畢
+     * @param {String} p 圖片的名字
+     */
+    imageLoad(p) {
+      // console.log("img", p);
+      this.imageCompleteWatcher[p] = true;
+      // console.log(this.imageCompleteWatcher);
     },
   },
 };
@@ -132,8 +204,8 @@ export default {
           flex-direction: row;
           height: 100%;
           position: relative;
-          
-          .title{ 
+
+          .title {
             width: 30%;
             font-size: 20px;
             height: 100%;
@@ -142,8 +214,11 @@ export default {
             justify-content: center;
           }
           .introduce {
+            transition: opacity 0.6s;
+            margin-left: 20px;
+            margin-right: 20px;
             width: 70%;
-            font-size: 20px;
+            font-size: 16px;
             height: 100%;
             display: flex;
             align-items: center;
@@ -158,7 +233,7 @@ export default {
             right: 0px;
             overflow: hidden;
             > img {
-              filter: blur(2px);
+              // filter: blur(2px);
               transition: transform 0.6s;
               transform: scale(1);
               height: 100%;
@@ -174,12 +249,12 @@ export default {
           overflow: hidden;
           opacity: 1;
         }
-        .items:hover .item-img >img {
+        .items:hover .item-img > img {
           transform: scale(1.2);
         }
         .items:hover .introduce {
-          z-index: 9999;
           color: white;
+          opacity: 0.6;
         }
       }
     }
