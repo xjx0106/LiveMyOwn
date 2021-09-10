@@ -6,11 +6,20 @@
         loop
         class="video"
         muted
-        @canplay="videoLoaded"
+        @canplay="backgroundLoaded"
         ref="video"
+        autobuffer
+        autoplay
+        playsinline
       >
-        <source src="@/assets/video/neon-bg2.mp4" id="v1" />
+        <source src="@/assets/video/neon-bg2.mp4" />
       </video>
+      <!-- <img
+        @load="backgroundLoaded"
+        autobuffer
+        class="video"
+        src="../assets/image/neon-bg2.gif"
+      /> -->
     </div>
     <div class="mian-area">
       <div class="mian-left">
@@ -33,8 +42,9 @@ export default {
   created() {},
   computed: {},
   methods: {
-    async videoLoaded() {
-      console.log("videoLoaded, emit home-loaded");
+    async backgroundLoaded() {
+      // alert("ready to emit")
+      console.log("backgroundLoaded, emit home-loaded");
       ee.emit("home-loaded");
       this.$nextTick(() => {
         this.$refs.video.play();
@@ -64,13 +74,14 @@ export default {
     // z-index: 1;
     color: white;
     font-size: 40px;
-    height: 100vh;
+    height: 100%;
     position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
     .mian-left {
+      // border: 1px solid red;
       height: 93%;
       width: 47%;
       background-color: #00000000;
@@ -88,7 +99,7 @@ export default {
     .mian-right {
       height: 93%;
       width: 47%;
-      background-color: #00000099;
+      background-color: #00000066;
     }
     > div {
       width: 50px;

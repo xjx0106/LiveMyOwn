@@ -48,12 +48,14 @@ export default {
   height: 100%;
   width: 100%;
 
-  background-color: white;
+  background-color: black;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  // overflow: hidden;
+
+  overflow: hidden; // 阻止手机滑动
+  position:fixed; // 阻止手机滑动
   .loading {
     transition: all 1s;
   }
