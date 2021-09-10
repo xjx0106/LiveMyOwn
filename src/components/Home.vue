@@ -34,7 +34,7 @@
               {{item.title}}
             </div>
             <div class="item-img">
-              <img src="@/assets/image/bg1.jpg" alt="" >
+              <img :src="item.poster" alt="" >
             </div>
             <div class="introduce">
               {{item.introduce}}
@@ -158,6 +158,7 @@ export default {
             right: 0px;
             overflow: hidden;
             > img {
+              filter: blur(2px);
               transition: transform 0.6s;
               transform: scale(1);
               height: 100%;
