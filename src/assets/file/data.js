@@ -78,4 +78,4 @@ const dataList = {
   dataChinese: dataChinese,
   dataFake: dataFake
 };
-export default dataList.dataFake;
+export default dataList.dataChinese;
