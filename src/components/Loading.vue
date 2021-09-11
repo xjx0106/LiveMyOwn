@@ -5,19 +5,27 @@
         <img src="@/assets/image/loading.gif" />
       </div>
       <div class="text">L o a d i n g {{ dots }}</div>
+      <div class="progress-bar">
+        <div class="bar">
+          <div class="bar-content" :style="progressStyle"></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import ee from "@/components/eventEmitter.js";
 export default {
   name: "Loading",
   data() {
     return {
-      dots: ""
+      dots: "",
+      progressStyle: "style: width: 0%"
     };
   },
   created() {
+    ee.on("setProgress", this.setProgress);
     let dotCount = 0;
     setInterval(() => {
       this.setDot(dotCount);
@@ -29,7 +37,14 @@ export default {
     }, 400);
   },
   mounted() {},
+  beforeDestroy() {
+    ee.off("setProgress", this.setProgress);
+  },
   methods: {
+    /**
+     * 設置Loading後面3個小圓點
+     * @param {Number} dotCount 現在有幾個小圓點了
+     */
     setDot(dotCount) {
       switch (dotCount) {
         case 0:
@@ -45,6 +60,15 @@ export default {
           this.dots = ". . .";
           break;
       }
+    },
+    /**
+     * 設置進度條的進度
+     * @param {Number} count 當前已經加載完的資源文件（圖片、視頻等）
+     * @param {Number} all 所有資源文件的數量
+     */
+    setProgress(count, all) {
+      let percentage = (count / all) * 100;
+      this.progressStyle = "width: " + percentage + "%";
     }
   }
 };
@@ -70,6 +94,23 @@ export default {
     .text {
       margin-top: 10px;
       font-size: 16px;
+    }
+    .progress-bar {
+      .bar {
+        margin: 0px auto;
+        margin-top: 10px;
+        border: 2px solid #00000044;
+        height: 10px;
+        width: 150px;
+        position: relative;
+        .bar-content {
+          transition: width 0.2s;
+          height: 100%;
+          overflow: hidden;
+          width: 0%;
+          background-color: #00000099;
+        }
+      }
     }
   }
 }

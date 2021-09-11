@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import ee from "@/components/eventEmitter.js";
 import dataConfig from "@/assets/file/data.js";
 import Loading from "@/components/Loading.vue";
 
@@ -91,29 +92,28 @@ export default {
 
         this.$nextTick(() => {
           let allowHideLoading = true;
+          let finishedCount = 0;
           Object.values(value).forEach(isThisPicLoaded => {
             if (isThisPicLoaded === false) {
               allowHideLoading = false;
+            } else {
+              finishedCount++;
             }
           });
-
+          ee.emit("setProgress", finishedCount, Object.values(value).length);
           if (!allowHideLoading) {
             console.log("【watch】存在未加載完成的圖片...");
           } else {
             console.log("【watch】全部圖片已經加載！");
-            // ee.emit("home-loaded");
             console.log("【watch】全部圖片已經加載，請求關閉loading頁面！");
             setTimeout(() => {
               this.introduceStyle = "z-index: 9999";
               this.loadingStyle = "opacity: 0";
-            }, 1000);
+            }, 300);
             setTimeout(() => {
               console.log("【watch】執行loading消失");
               this.loadingShow = false;
-            }, 2000);
-            // if(this.refs.video) {
-            //   this.$refs.video.play();
-            // }
+            }, 1300);
           }
         });
       },
