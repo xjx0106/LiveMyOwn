@@ -29,7 +29,12 @@
       </div>
       <div class="mian-right">
         <div class="header">
-          <div v-for="(item, index) in data.header" :key="index" class="items" @click="jumpToItem(index)">
+          <div
+            v-for="(item, index) in data.header"
+            :key="index"
+            class="items"
+            @click="jumpToItem(index)"
+          >
             <div class="title">
               {{ item.title }}
             </div>
@@ -48,14 +53,13 @@
 </template>
 
 <script>
-import ee from "@/components/eventEmitter.js";
 import dataConfig from "@/assets/file/data.js";
 import Loading from "@/components/Loading.vue";
 
 export default {
   name: "Home",
   components: {
-    Loading,
+    Loading
   },
   data() {
     return {
@@ -68,18 +72,16 @@ export default {
         // 網路潔癖: false,
         // bg: false
       },
-      introduceStyle: "", // 介紹的文字的動態樣式
+      introduceStyle: "" // 介紹的文字的動態樣式
     };
   },
   created() {
-    console.log("created");
+    console.log("home created");
     this.data = dataConfig;
     this.initImageCompleteWatcher();
-    ee.on("home-loaded", this.loadingDisappear);
   },
   mounted() {
-    console.log("mounted");
-    ee.off("home-loaded", this.loadingDisappear);
+    console.log("home mounted");
   },
   watch: {
     imageCompleteWatcher: {
@@ -89,24 +91,24 @@ export default {
 
         this.$nextTick(() => {
           let allowHideLoading = true;
-          Object.values(value).forEach((isThisPicLoaded) => {
+          Object.values(value).forEach(isThisPicLoaded => {
             if (isThisPicLoaded === false) {
               allowHideLoading = false;
             }
           });
 
           if (!allowHideLoading) {
-            console.log("存在未加載完成的圖片...");
+            console.log("【watch】存在未加載完成的圖片...");
           } else {
-            console.log("全部圖片已經加載！");
-            ee.emit("home-loaded");
-            console.log("全部圖片已經加載，請求關閉loading頁面！");
+            console.log("【watch】全部圖片已經加載！");
+            // ee.emit("home-loaded");
+            console.log("【watch】全部圖片已經加載，請求關閉loading頁面！");
             setTimeout(() => {
               this.introduceStyle = "z-index: 9999";
               this.loadingStyle = "opacity: 0";
             }, 1000);
             setTimeout(() => {
-              console.log("執行loading消失");
+              console.log("【watch】執行loading消失");
               this.loadingShow = false;
             }, 2000);
             // if(this.refs.video) {
@@ -115,9 +117,9 @@ export default {
           }
         });
       },
-      deep: true,
+      deep: true
       // immediate: true,
-    },
+    }
   },
   computed: {},
   beforeDestroy() {
@@ -134,20 +136,20 @@ export default {
     /**
      * 旋轉加載消失
      */
-    loadingDisappear() {
-      console.log("收到loading消失的請求");
-      this.loadingStyle = "opacity: 0";
-      setTimeout(() => {
-        this.loadingShow = false;
-        console.log("執行loading消失");
-      }, 1100);
-    },
+    // loadingDisappear() {
+    //   console.log("收到loading消失的請求");
+    //   this.loadingStyle = "opacity: 0";
+    //   setTimeout(() => {
+    //     this.loadingShow = false;
+    //     console.log("執行loading消失");
+    //   }, 1100);
+    // },
     /**
      * 初始化圖片集合
      * @description 用於通過watch檢測圖片是否已經全部加載完畢
      */
     initImageCompleteWatcher() {
-      dataConfig.header.forEach((itme) => {
+      dataConfig.header.forEach(itme => {
         this.imageCompleteWatcher[itme.title] = false;
       });
       this.imageCompleteWatcher.bg = false;
@@ -172,8 +174,8 @@ export default {
       // console.log("img", p);
       this.imageCompleteWatcher[p] = true;
       // console.log(this.imageCompleteWatcher);
-    },
-  },
+    }
+  }
 };
 </script>
 

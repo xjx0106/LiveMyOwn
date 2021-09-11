@@ -7,11 +7,10 @@
 <script>
 export default {
   name: "App",
-  components: {
-  },
+  components: {},
   data() {
-    return {}
-  },
+    return {};
+  }
 };
 </script>
 
@@ -30,6 +29,6 @@ export default {
   text-align: center;
 
   overflow: hidden; // 阻止手機滑動
-  position:fixed; // 阻止手機滑動
+  position: fixed; // 阻止手機滑動
 }
 </style>

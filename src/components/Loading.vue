@@ -14,14 +14,14 @@ export default {
   name: "Loading",
   data() {
     return {
-      dots: "",
+      dots: ""
     };
   },
   created() {
     let dotCount = 0;
     setInterval(() => {
       this.setDot(dotCount);
-      if(dotCount === 3) {
+      if (dotCount === 3) {
         dotCount = 0;
       } else {
         dotCount++;
@@ -46,7 +46,7 @@ export default {
           break;
       }
     }
-  },
+  }
 };
 </script>
 
