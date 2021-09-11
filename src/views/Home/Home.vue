@@ -24,12 +24,12 @@
     <div class="mian-area">
       <div class="mian-left">
         <div class="mian-title">
-          這裏有我的故事
+          {{ data.title }}
         </div>
       </div>
       <div class="mian-right">
         <div class="header">
-          <div v-for="(item, index) in data.header" :key="index" class="items">
+          <div v-for="(item, index) in data.header" :key="index" class="items" @click="jumpToItem(index)">
             <div class="title">
               {{ item.title }}
             </div>
@@ -43,17 +43,24 @@
         </div>
       </div>
     </div>
+    <Loading v-if="loadingShow" class="loading" :style="loadingStyle"></Loading>
   </div>
 </template>
 
 <script>
 import ee from "@/components/eventEmitter.js";
 import dataConfig from "@/assets/file/data.js";
+import Loading from "@/components/Loading.vue";
 
 export default {
   name: "Home",
+  components: {
+    Loading,
+  },
   data() {
     return {
+      loadingShow: true,
+      loadingStyle: "opacity: 1",
       data: null,
       imageCompleteWatcher: {
         // 九龍城寨: false,
@@ -68,9 +75,11 @@ export default {
     console.log("created");
     this.data = dataConfig;
     this.initImageCompleteWatcher();
+    ee.on("home-loaded", this.loadingDisappear);
   },
   mounted() {
     console.log("mounted");
+    ee.off("home-loaded", this.loadingDisappear);
   },
   watch: {
     imageCompleteWatcher: {
@@ -87,14 +96,19 @@ export default {
           });
 
           if (!allowHideLoading) {
-            console.log("存在未加載完成的圖片");
+            console.log("存在未加載完成的圖片...");
           } else {
-            console.log("全部圖片已經加載");
+            console.log("全部圖片已經加載！");
             ee.emit("home-loaded");
-            console.log("全部圖片已經加載，請求關閉loading頁面");
+            console.log("全部圖片已經加載，請求關閉loading頁面！");
             setTimeout(() => {
               this.introduceStyle = "z-index: 9999";
+              this.loadingStyle = "opacity: 0";
             }, 1000);
+            setTimeout(() => {
+              console.log("執行loading消失");
+              this.loadingShow = false;
+            }, 2000);
             // if(this.refs.video) {
             //   this.$refs.video.play();
             // }
@@ -110,6 +124,24 @@ export default {
     this.introduceStyle = "";
   },
   methods: {
+    /**
+     * 跳轉到項目
+     */
+    jumpToItem() {
+      console.log("jump");
+      this.$router.push("/Kowloon-Walled-City");
+    },
+    /**
+     * 旋轉加載消失
+     */
+    loadingDisappear() {
+      console.log("收到loading消失的請求");
+      this.loadingStyle = "opacity: 0";
+      setTimeout(() => {
+        this.loadingShow = false;
+        console.log("執行loading消失");
+      }, 1100);
+    },
     /**
      * 初始化圖片集合
      * @description 用於通過watch檢測圖片是否已經全部加載完畢
@@ -258,6 +290,9 @@ export default {
         }
       }
     }
+  }
+  .loading {
+    transition: all 1s;
   }
 }
 </style>

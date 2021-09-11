@@ -1,43 +1,17 @@
 <template>
   <div id="app">
-    <Home></Home>
-    <Loading v-if="loadingShow" class="loading" :style="loadingStyle"></Loading>
+    <router-view :key="this.$route.path" />
   </div>
 </template>
 
 <script>
-import Loading from "@/components/Loading.vue";
-import Home from "@/components/Home.vue";
-import ee from "@/components/eventEmitter.js";
-
 export default {
   name: "App",
   components: {
-    Loading,
-    Home
   },
   data() {
-    return {
-      loadingShow: true,
-      loadingStyle: "opacity: 1"
-    }
+    return {}
   },
-  created() {
-    ee.on("home-loaded", this.loadingDisappear);
-  },
-  beforeDestroy() {
-    ee.off("home-loaded", this.loadingDisappear);
-  },
-  methods: {
-    loadingDisappear() {
-      console.log("收到loading消失的請求");
-      this.loadingStyle = "opacity: 0";
-      setTimeout(() => {
-        this.loadingShow = false;
-        console.log("執行loading消失");
-      }, 1100);
-    }
-  }
 };
 </script>
 
@@ -57,8 +31,5 @@ export default {
 
   overflow: hidden; // 阻止手機滑動
   position:fixed; // 阻止手機滑動
-  .loading {
-    transition: all 1s;
-  }
 }
 </style>
