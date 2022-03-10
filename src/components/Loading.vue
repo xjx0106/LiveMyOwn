@@ -101,12 +101,13 @@ export default {
         margin-top: 10px;
         border: 2px solid #00000044;
         height: 10px;
+        border-radius: 10px;
         width: 150px;
         position: relative;
+        overflow: hidden;
         .bar-content {
           transition: width 0.2s;
           height: 100%;
-          overflow: hidden;
           width: 0%;
           background-color: #00000099;
         }

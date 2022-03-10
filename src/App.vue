@@ -16,7 +16,7 @@ export default {
 
 <style lang="scss" scoped>
 #app {
-  position: absolute;
+  // position: fixed;
   left: 0px;
   top: 0px;
   height: 100%;

@@ -129,9 +129,11 @@ export default {
     /**
      * 跳轉到項目
      */
-    jumpToItem() {
-      console.log("jump");
-      this.$router.push("/Kowloon-Walled-City");
+    jumpToItem(item) {
+      console.log("jump", item);
+      if (item === "0") {
+        this.$router.push("/Kowloon-Walled-City");
+      }
     },
     /**
      * 旋轉加載消失
