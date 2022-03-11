@@ -14,6 +14,11 @@ const routes = [
     path: "/Kowloon-Walled-City",
     name: "KowloonWalledCity",
     component: () => import("@/views/KowLoon/index.vue")
+  },
+  {
+    path: "/NetWork",
+    name: "NetWork",
+    component: () => import("@/views/NetWork/index.vue")
   }
 ];
 

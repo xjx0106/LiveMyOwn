@@ -131,8 +131,11 @@ export default {
      */
     jumpToItem(item) {
       console.log("jump", item);
-      if (item === "0") {
+      if (item === 0) {
         this.$router.push("/Kowloon-Walled-City");
+      }
+      if (item === 2) {
+        this.$router.push("/NetWork");
       }
     },
     /**
